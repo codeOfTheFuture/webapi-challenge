@@ -5,10 +5,10 @@ const ProjectDb = require('./projectModel');
 const router = express.Router();
 
 // Get a single project by id
-router.get('/:id', async (req, res) => {
+router.get('/:id', validateProjectId, async (req, res) => {
   try {
     const {
-      params: { id },
+      project: { id },
     } = req;
 
     const project = await ProjectDb.get(id);
@@ -36,14 +36,19 @@ router.post('/', async (req, res) => {
 });
 
 // Update a project by id
-router.put('/:id', async (req, res) => {
+router.put('/:id', validateProjectId, async (req, res) => {
   try {
     const {
-      params: { id },
-      body,
+      project: { id },
+      body: { name, description, completed },
     } = req;
 
-    const updatedProject = await ProjectDb.update(id, body);
+    const updatedProject = await ProjectDb.update(id, {
+      name,
+      description,
+      completed,
+    });
+
     res.status(200).json(updatedProject);
   } catch (error) {
     console.log(error);
@@ -54,10 +59,10 @@ router.put('/:id', async (req, res) => {
 });
 
 // Delete a project by id
-router.delete('/:id', async (req, res) => {
+router.delete('/:id', validateProjectId, async (req, res) => {
   try {
     const {
-      params: { id },
+      project: { id },
     } = req;
 
     const deleteUser = await ProjectDb.remove(id);
@@ -71,10 +76,10 @@ router.delete('/:id', async (req, res) => {
 });
 
 // Get a single projects actions by project id
-router.get('/:id/actions', async (req, res) => {
+router.get('/:id/actions', validateProjectId, async (req, res) => {
   try {
     const {
-      params: { id },
+      project: { id },
     } = req;
 
     const getProjectActions = await ProjectDb.getProjectActions(id);
@@ -86,5 +91,28 @@ router.get('/:id/actions', async (req, res) => {
     });
   }
 });
+
+// Custom middleware
+async function validateProjectId(req, res, next) {
+  try {
+    const {
+      params: { id },
+    } = req;
+
+    const project = await ProjectDb.get(id);
+    if (project) {
+      req.project = project;
+      next();
+    } else {
+      res.status(404).json({
+        message: `Project with the id ${id} was not found.`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'There was an error validating the project',
+    });
+  }
+}
 
 module.exports = router;
