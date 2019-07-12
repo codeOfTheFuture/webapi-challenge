@@ -24,15 +24,21 @@ In this challenge, create a web API around the following resources: `Projects` a
 
 Demonstrate your understanding of this Sprint's concepts by answering the following free-form questions. Edit this document to include your answers after each question. Make sure to leave a blank line above and below your answer so it is clear and easy to read by your project manager.
 
-- [ ] Mention two parts of Express that you learned about this week.
+- [x] Mention two parts of Express that you learned about this week.
+      The express.json() built in middleware that parses incoming requests with json payloads. Express.json() middleware works similar to body parser
 
-- [ ] Describe Middleware?
+- [x] Describe Middleware?
+      Middleware are functions that can access the req object and res object and next function. Middleware can change the req and res objects, end the req, res cycle and call the next middleware in the stack.
 
-- [ ] Describe a Resource?
+- [x] Describe a Resource?
+      A resource is data that CRUD operations can be performed on.
+      CRUD = Create, Read, Update, Delete
 
-- [ ] What can the API return to help clients know if a request was successful?
+- [x] What can the API return to help clients know if a request was successful?
+      An API can return a http status of 200 which is a successful request.
 
-- [ ] How can we partition our application into sub-applications?
+- [x] How can we partition our application into sub-applications?
+      By using express.Router(), and performing CRUD operations on different resources in separate .js files and assigning a unique path for each resource.
 
 ## Project Setup
 
@@ -47,9 +53,9 @@ Follow these steps to set up and work on your project:
 
 Follow these steps for completing your project.
 
-- [ ] Submit a Pull-Request to merge <firstName-lastName> Branch into master on your fork. **Please don't merge your own pull request.**
-- [ ] Add your _Project Manager_ as a Reviewer on the Pull-request
-- [ ] Your _Project Manager_ will count the challenge as done by merging the branch into _master_.
+- [x] Submit a Pull-Request to merge <firstName-lastName> Branch into master on your fork. **Please don't merge your own pull request.**
+- [x] Add your _Project Manager_ as a Reviewer on the Pull-request
+- [x] Your _Project Manager_ will count the challenge as done by merging the branch into _master_.
 
 ## Database Persistence Helpers
 

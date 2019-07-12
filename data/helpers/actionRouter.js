@@ -1,6 +1,7 @@
 const express = require('express');
 
 const ActionDb = require('./actionModel');
+const ProjectDb = require('./projectModel');
 
 const router = express.Router();
 
@@ -22,7 +23,7 @@ router.get('/:id', async (req, res) => {
 });
 
 // Add an action to a project
-router.post('/', async (req, res) => {
+router.post('/', validateProjectId, async (req, res) => {
   try {
     const {
       body: { project_id, description, notes, completed },
@@ -83,5 +84,27 @@ router.delete('/:id', async (req, res) => {
     });
   }
 });
+
+// Custom middleware
+async function validateProjectId(req, res, next) {
+  try {
+    const {
+      body: { project_id },
+    } = req;
+
+    const project = await ProjectDb.get(project_id);
+    if (project) {
+      next();
+    } else {
+      res.status(404).json({
+        message: `Project with the id ${project_id} was not found.`,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({
+      message: 'There was an error validating the project',
+    });
+  }
+}
 
 module.exports = router;
